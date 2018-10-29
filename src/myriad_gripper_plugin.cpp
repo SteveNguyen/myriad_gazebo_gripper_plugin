@@ -220,7 +220,7 @@ void GazeboRosMyriadGripper::UpdateChild()
       double norm = diff.Pos().Length();
       // std::cerr<<"GRIP: "<< links[j]->GetModel()->GetName()<<" "<<links[j]->GetName()<<" "<<link_->GetModel()->GetName()<<" "<<link_->GetName()<<" "<<norm<<" "<<parent_pose.Pos()<<" "<<link_pose.Pos()<<std::endl;      
       if (norm < 0.05) {
-        double norm_force = 1 / norm;
+        double norm_force = 1.0 / (norm*100.0);
         
 #if GAZEBO_MAJOR_VERSION >= 8
         links[j]->SetLinearVel(link_->WorldLinearVel());
@@ -249,8 +249,8 @@ void GazeboRosMyriadGripper::UpdateChild()
         
                 
         
-        if (norm_force > 1) {
-          norm_force = 1;  // max_force
+        if (norm_force > 0.1) {
+          norm_force = 0.1;  // max_force
         }
         ignition::math::Vector3d force = norm_force * diff.Pos().Normalize();
         // ignition::math::Vector3d force;
